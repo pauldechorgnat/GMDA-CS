@@ -282,7 +282,7 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
     int dimension = new_direction.coordinates.size();
     
     // sort the dataset along the chosen direction
-    std::sort( begin, end, compare_along_direction(new_direction));
+    std::sort(begin, end, compare_along_direction(new_direction));
     // compute the diameter of the dataset
     double diameter = compute_diameter(dataset_input);
     node_diameter = diameter;
@@ -298,8 +298,8 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
     double jittered_split_value = diameter*3. / sqrt((double)dimension);
 	jittered_split_value *=random_number;
     jittered_split_value += dot_product(new_direction, median_point);
-    cout << "diameter " << diameter << " at depth " << depth << endl;
-    cout << "split value " << jittered_split_value << endl;
+    //cout << "diameter " << diameter << " at depth " << depth << endl;
+    //cout << "split value " << jittered_split_value << endl;
 
     // grouping the data into the subnodes
     DataSet dataset_left, dataset_right;
@@ -312,8 +312,8 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
 		}
 	}
 	
-	cout << "Size of left dataset : " << dataset_left.size() << endl;
-	cout << "Size of right dataset : " << dataset_right.size() << endl;
+	//cout << "Size of left dataset : " << dataset_left.size() << endl;
+	//cout << "Size of right dataset : " << dataset_right.size() << endl;
 	
     // recursivity
     if ( dataset_left.size()>0){
@@ -330,32 +330,42 @@ int main(){
 	// setting parameters
 	int simulation_dimension = 3;
 	int simulation_number_of_points = 1600;
-	int simulation_number_of_iterations = 100;
+	int simulation_number_of_iterations = 50;
 	// setting output and input path
-	string output_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/results_swissroll/";
-	string input_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/data for gmda/swissroll";
+	string github_repo_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/";
+	string output_path = github_repo_path + "results_swissroll/";
+	string input_path = github_repo_path + "input_data/swissroll";
 	// getting canonical base
 	DataSet base_canonical = canonical_base(simulation_dimension);
 	//getting data
-	DataSet dataset = load_data("/home/paul/Desktop/data for cpp/mnist_original", simulation_number_of_points, simulation_dimension);
+	DataSet dataset = load_data(input_path, simulation_number_of_points, simulation_dimension);
+	cout << "number of iterations " << simulation_number_of_iterations<< endl;
 	
 	for(int iteration = 1; iteration <= simulation_number_of_iterations; iteration++){
 		
 		string iteration_string = std::to_string(iteration);
-		
+		cout << "iteration n°" << iteration << endl; 
 		// defining a rotated base
 		DataSet base_rotated = matrix_rand_ortho(simulation_dimension);
 		// Building the two trees
-		Node tree = Node(dataset,base_canonical, 0, 0, 2);
-		Node rotated_tree = Node(dataset,base_rotated, 0, 0, 2);
+		Node tree = Node(dataset,base_canonical, 0, 0, 10);
+		Node rotated_tree = Node(dataset,base_rotated, 0, 0, 10);
 
 		// Exploring trees
 		TreeSummary tree_summary, rotated_tree_summary;
 		explore_tree(tree, tree_summary);
 		explore_tree(rotated_tree, rotated_tree_summary);
 		// Saving data
-		save_data(tree_summary, output_path + "regular_tree_"+iteration_string);
-		save_data(tree_summary, output_path + "rotated_tree_"+iteration_string);
+		save_data(tree_summary, output_path + "regular_tree/tree_"+iteration_string);
+		save_data(tree_summary, output_path + "rotated_tree/tree_"+iteration_string);
 	}
+	/*for(int i = 0; i< simulation_number_of_points; i++){
+		Point pt;
+		pt = dataset[i];
+		for(int j = 0; j<simulation_dimension; j++){
+			cout << pt.coordinates[j] << "\t";
+		}
+		cout << endl;
+	}*/
 	return 0;	
 }

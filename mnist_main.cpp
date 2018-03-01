@@ -294,10 +294,10 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
     random_number = -1. + random_number*2.;
     //cout << "random number : " << random_number << endl;
     double jittered_split_value = diameter*3. / sqrt((double)dimension);
-	jittered_split_value *=0.;
+	jittered_split_value *=random_number;
     jittered_split_value += dot_product(new_direction, median_point);
-    cout << "diameter " << diameter << " at depth " << depth << endl;
-    cout << "split value " << jittered_split_value << endl;
+    //cout << "diameter " << diameter << " at depth " << depth << endl;
+    //cout << "split value " << jittered_split_value << endl;
 
     // grouping the data into the subnodes
     DataSet dataset_left, dataset_right;
@@ -310,8 +310,8 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
 		}
 	}
 	
-	cout << "Size of left dataset : " << dataset_left.size() << endl;
-	cout << "Size of right dataset : " << dataset_right.size() << endl;
+	//cout << "Size of left dataset : " << dataset_left.size() << endl;
+	//cout << "Size of right dataset : " << dataset_right.size() << endl;
 	
     // recursivity
     if ( dataset_left.size()>0){
@@ -325,19 +325,23 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
 int main(){
 	// setting parameters
 	int simulation_dimension = 784;
-	int simulation_number_of_points = 70000;
-	int simulation_number_of_iterations = 100;
+	int simulation_number_of_points = 1000;
+	int simulation_number_of_iterations = 50;
 	// setting output and input path
-	string output_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/results_mnist/";
-	string input_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/data for gmda/mnist_original";
+	string github_repo_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/";
+	string output_path = github_repo_path + "results_mnist/";
+	string input_path = github_repo_path + "input_data/mnist_original_small";
 	// getting canonical base
 	DataSet base_canonical = canonical_base(simulation_dimension);
 	//getting data
-	DataSet dataset = load_data("/home/paul/Desktop/data for cpp/mnist_original", simulation_number_of_points, simulation_dimension);
-	
+	DataSet dataset = load_data(input_path, simulation_number_of_points, simulation_dimension);
+	cout << "number of iterations " << simulation_number_of_iterations<< endl;
+
+
 	for(int iteration = 1; iteration <= simulation_number_of_iterations; iteration++){
 		
 		string iteration_string = std::to_string(iteration);
+		cout << "iteration n°" << iteration << endl; 
 		
 		// defining a rotated base
 		DataSet base_rotated = matrix_rand_ortho(simulation_dimension);
@@ -349,8 +353,17 @@ int main(){
 		explore_tree(tree, tree_summary);
 		explore_tree(rotated_tree, rotated_tree_summary);
 		// Saving data
-		save_data(tree_summary, output_path + "regular_tree_"+iteration_string);
-		save_data(tree_summary, output_path + "rotated_tree_"+iteration_string);
-	}
+		save_data(tree_summary, output_path + "regular_tree/tree_"+iteration_string);
+		save_data(tree_summary, output_path + "rotated_tree/tree_"+iteration_string);
+		}
+/*
+	for(int i = 0; i< simulation_number_of_points; i++){
+		Point pt;
+		pt = dataset[i];
+		for(int j = 0; j<simulation_dimension; j++){
+			cout << pt.coordinates[j] << "\t";
+		}
+	cout << endl;
+	}*/
 	return 0;	
 }
