@@ -328,23 +328,23 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
  
 int main(){
 	// setting parameters
-	int dimension = 22;
-	int number_of_points = 146949;
-	int number_of_iterations = 100;
+	int simulation_dimension = 22;
+	int simulation_number_of_points = 146949;
+	int simulation_number_of_iterations = 100;
 	// setting output and input path
 	string output_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/results_auslan/";
 	string input_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/data for gmda/auslan";
 	// getting canonical base
-	DataSet base_canonical = canonical_base(dimension);
+	DataSet base_canonical = canonical_base(simulation_dimension);
 	//getting data
-	DataSet dataset = load_data("/home/paul/Desktop/data for cpp/mnist_original", number_of_points, dimension);
+	DataSet dataset = load_data("/home/paul/Desktop/data for cpp/mnist_original", simulation_number_of_points, simulation_dimension);
 	
-	for(int iteration = 1; iteration <= number_of_iterations; iteration++){
+	for(int iteration = 1; iteration <= simulation_number_of_iterations; iteration++){
 		
 		string iteration_string = std::to_string(iteration);
 		
 		// defining a rotated base
-		DataSet base_rotated = matrix_rand_ortho(dimension);
+		DataSet base_rotated = matrix_rand_ortho(simulation_dimension);
 		// Building the two trees
 		Node rotated_tree = Node(dataset,base_rotated, 0, 0, 2);
 		Node tree = Node(dataset,base_canonical, 0, 0, 2);

@@ -296,7 +296,7 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
     random_number = -1. + random_number*2.;
     //cout << "random number : " << random_number << endl;
     double jittered_split_value = diameter*3. / sqrt((double)dimension);
-	jittered_split_value *=0.;
+	jittered_split_value *=random_number;
     jittered_split_value += dot_product(new_direction, median_point);
     cout << "diameter " << diameter << " at depth " << depth << endl;
     cout << "split value " << jittered_split_value << endl;
@@ -328,26 +328,27 @@ Node::Node( DataSet dataset_input, DataSet base, int index_direction, int depth 
  
 int main(){
 	// setting parameters
-	int dimension = 3;
-	int number_of_points = 1600;
-	int number_of_iterations = 100;
+	int simulation_dimension = 3;
+	int simulation_number_of_points = 1600;
+	int simulation_number_of_iterations = 100;
 	// setting output and input path
 	string output_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/results_swissroll/";
 	string input_path = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/data for gmda/swissroll";
 	// getting canonical base
-	DataSet base_canonical = canonical_base(dimension);
+	DataSet base_canonical = canonical_base(simulation_dimension);
 	//getting data
-	DataSet dataset = load_data("/home/paul/Desktop/data for cpp/mnist_original", number_of_points, dimension);
+	DataSet dataset = load_data("/home/paul/Desktop/data for cpp/mnist_original", simulation_number_of_points, simulation_dimension);
 	
-	for(int iteration = 1; iteration <= number_of_iterations; iteration++){
+	for(int iteration = 1; iteration <= simulation_number_of_iterations; iteration++){
 		
 		string iteration_string = std::to_string(iteration);
 		
 		// defining a rotated base
-		DataSet base_rotated = matrix_rand_ortho(dimension);
+		DataSet base_rotated = matrix_rand_ortho(simulation_dimension);
 		// Building the two trees
-		Node rotated_tree = Node(dataset,base_rotated, 0, 0, 2);
 		Node tree = Node(dataset,base_canonical, 0, 0, 2);
+		Node rotated_tree = Node(dataset,base_rotated, 0, 0, 2);
+
 		// Exploring trees
 		TreeSummary tree_summary, rotated_tree_summary;
 		explore_tree(tree, tree_summary);
