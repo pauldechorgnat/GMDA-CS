@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from os import listdir
 
+parent_folder = "/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/"
 
 
 # loading the data
@@ -50,6 +51,24 @@ def save_plots(parent_folder_path):
     return output_data_frames
 
 
-save_plots("/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/results_swissroll/")
-save_plots("/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/results_mnist/")
-save_plots("/home/paul/Desktop/MSc DSBA/7. Geometric Methods for Data Analysis/Github/GMDA-CS/results_auslan/")
+output_auslan = save_plots(parent_folder + "results_auslan/")
+
+
+regular = output_auslan[0]
+rotated = output_auslan[1]
+
+
+plt.figure(figsize = (16,8))
+plt.plot(regular.index, regular['diameter']['mean'])
+plt.plot(regular.index, rotated['diameter']['mean'])
+plt.fill_between(regular.index, regular['diameter']['mean'], rotated['diameter']['mean'], color = 'green', alpha = .25)
+plt.legend(['regular tree', 'rotated tree'], loc = "upper right")
+plt.grid()
+plt.title('Auslan Dataset - diameter evolution comparison')
+plt.savefig(parent_folder + "results_auslan/auslan_diff.png")
+plt.show()
+
+
+output_swissroll = save_plots(parent_folder + "/results_swissroll/")
+
+# output_mnist = save_plots(parent_folder + "/results_mnist/")

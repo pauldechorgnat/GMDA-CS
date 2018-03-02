@@ -354,7 +354,7 @@ int main(){
 		explore_tree(rotated_tree, rotated_tree_summary);
 		// Saving data
 		save_data(tree_summary, output_path + "regular_tree/tree_"+iteration_string);
-		save_data(tree_summary, output_path + "rotated_tree/tree_"+iteration_string);
+		save_data(rotated_tree_summary, output_path + "rotated_tree/tree_"+iteration_string);
 		}
 /*
 	for(int i = 0; i< simulation_number_of_points; i++){
